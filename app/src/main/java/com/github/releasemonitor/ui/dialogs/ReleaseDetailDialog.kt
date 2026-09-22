@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.github.releasemonitor.model.Project
-import top.yukonga.miuix.kmp.basic.Card
+import com.github.releasemonitor.ui.miuix.MiuixCard
 
 @Composable
 fun ReleaseDetailDialog(
@@ -24,7 +24,7 @@ fun ReleaseDetailDialog(
     val context = LocalContext.current
 
     Dialog(onDismissRequest = onDismiss) {
-        Card(
+        MiuixCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)

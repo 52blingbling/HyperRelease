@@ -1,6 +1,5 @@
 package com.github.releasemonitor.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,11 +21,12 @@ import com.github.releasemonitor.network.GitHubReleaseChecker
 import com.github.releasemonitor.ui.dialogs.ProjectEditDialog
 import com.github.releasemonitor.ui.dialogs.ReleaseDetailDialog
 import com.github.releasemonitor.ui.dialogs.SettingsDialog
+import com.github.releasemonitor.ui.miuix.MiuixBadge
+import com.github.releasemonitor.ui.miuix.MiuixCard
+import com.github.releasemonitor.ui.miuix.MiuixGreen
+import com.github.releasemonitor.ui.miuix.MiuixOrange
+import com.github.releasemonitor.ui.miuix.SuperSwitch
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.basic.Card
-import top.yukonga.miuix.kmp.basic.Scaffold
-import top.yukonga.miuix.kmp.basic.Switch
-import top.yukonga.miuix.kmp.basic.TopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +93,13 @@ fun MainScreen(storage: StorageManager) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = "Release 监控",
+                title = {
+                    Text(
+                        text = "Release 监控",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 actions = {
                     IconButton(
                         onClick = { checkAllProjects() },
@@ -122,37 +128,18 @@ fun MainScreen(storage: StorageManager) {
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            // 1. 设置分组卡片 (MIUI 胶囊 Switch)
+            // 1. 设置分组卡片 (MIUIX 经典 SuperSwitch)
             item {
-                Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 14.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
-                            Text(
-                                text = "打开软件自动检测",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(
-                                text = "启动应用时自动检查已录入项目的最新版本",
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                MiuixCard(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                    SuperSwitch(
+                        title = "打开软件自动检测",
+                        summary = "启动应用时自动检查已录入项目的最新版本",
+                        checked = autoCheckOnLaunch,
+                        onCheckedChange = {
+                            autoCheckOnLaunch = it
+                            storage.isAutoCheckOnLaunch = it
                         }
-                        Switch(
-                            checked = autoCheckOnLaunch,
-                            onCheckedChange = {
-                                autoCheckOnLaunch = it
-                                storage.isAutoCheckOnLaunch = it
-                            }
-                        )
-                    }
+                    )
                 }
             }
 
@@ -172,7 +159,7 @@ fun MainScreen(storage: StorageManager) {
                     if (updateCount > 0) {
                         Text(
                             text = "待更新: $updateCount",
-                            color = Color(0xFFFF6900),
+                            color = MiuixOrange,
                             fontWeight = FontWeight.Bold,
                             fontSize = 13.sp
                         )
@@ -183,14 +170,18 @@ fun MainScreen(storage: StorageManager) {
             // 2. 空状态提示
             if (projects.isEmpty()) {
                 item {
-                    Card(modifier = Modifier.fillMaxWidth().padding(vertical = 30.dp)) {
+                    MiuixCard(modifier = Modifier.fillMaxWidth().padding(vertical = 30.dp)) {
                         Column(
-                            modifier = Modifier.fillMaxWidth().padding(24.dp),
+                            modifier = Modifier.fillMaxWidth().padding(28.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("📦", fontSize = 40.sp)
+                            Text("📦", fontSize = 42.sp)
                             Spacer(modifier = Modifier.height(10.dp))
-                            Text("暂未录入监控项目", fontWeight = FontWeight.SemiBold)
+                            Text(
+                                text = "暂未录入监控项目",
+                                fontWeight = FontWeight.SemiBold,
+                                style = MaterialTheme.typography.titleMedium
+                            )
                             Spacer(modifier = Modifier.height(6.dp))
                             Text(
                                 text = "点击右上角 ＋ 按钮录入您的首个 GitHub 仓库",
@@ -202,20 +193,19 @@ fun MainScreen(storage: StorageManager) {
                 }
             }
 
-            // 3. 项目卡片列表
+            // 3. 项目卡片列表 (MIUIX 阻尼弹性圆角卡片)
             items(projects, key = { it.id }) { p ->
                 val hasUpdate = p.status == "有新版本"
                 val statusColor = when (p.status) {
-                    "有新版本" -> Color(0xFFFF6900) // 小米橙
-                    "已是最新" -> Color(0xFF00C48C) // 成功绿
-                    "检测中..." -> Color(0xFF0070F0) // 科技蓝
+                    "有新版本" -> MiuixOrange
+                    "已是最新" -> MiuixGreen
+                    "检测中..." -> Color(0xFF0070F0)
                     else -> MaterialTheme.colorScheme.onSurfaceVariant
                 }
 
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { viewingReleaseProject = p }
+                MiuixCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { viewingReleaseProject = p }
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -232,18 +222,7 @@ fun MainScreen(storage: StorageManager) {
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
-                            Surface(
-                                color = statusColor.copy(alpha = 0.12f),
-                                shape = MaterialTheme.shapes.small
-                            ) {
-                                Text(
-                                    text = p.status,
-                                    color = statusColor,
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                                )
-                            }
+                            MiuixBadge(text = p.status, color = statusColor)
                         }
 
                         // 仓库
@@ -269,7 +248,7 @@ fun MainScreen(storage: StorageManager) {
                                     text = "最新: ${p.latestVer.ifEmpty { "-" }}",
                                     fontSize = 12.sp,
                                     fontWeight = if (hasUpdate) FontWeight.Bold else FontWeight.Normal,
-                                    color = if (hasUpdate) Color(0xFFFF6900) else MaterialTheme.colorScheme.onSurface
+                                    color = if (hasUpdate) MiuixOrange else MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         }

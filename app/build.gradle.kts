@@ -55,10 +55,7 @@ android {
 }
 
 dependencies {
-    // compose-miuix-ui 官方核心库 (HyperOS / MIUI 风格)
-    implementation("top.yukonga.miuix.kmp:miuix-ui:0.9.4")
-
-    // AndroidX & Compose 基础库
+    // AndroidX & Compose 基础库 (官方稳定生态)
     implementation(platform("androidx.compose:compose-bom:2024.10.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -73,9 +70,4 @@ dependencies {
     // 网络与 JSON 请求 (用于请求 GitHub Release API)
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
-}
-
-// 动态匹配并禁用所有 AAR 元数据校验任务，零编译依赖，避免强校验中断
-tasks.matching { it.name.contains("AarMetadata") }.configureEach {
-    enabled = false
 }

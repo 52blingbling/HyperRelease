@@ -8,7 +8,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import top.yukonga.miuix.kmp.basic.Card
+import com.github.releasemonitor.ui.miuix.MiuixCard
 
 @Composable
 fun SettingsDialog(
@@ -19,7 +19,7 @@ fun SettingsDialog(
     var token by remember { mutableStateOf(initialToken) }
 
     Dialog(onDismissRequest = onDismiss) {
-        Card(
+        MiuixCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)

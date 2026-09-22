@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.github.releasemonitor.model.Project
-import top.yukonga.miuix.kmp.basic.Card
+import com.github.releasemonitor.ui.miuix.MiuixCard
 
 @Composable
 fun ProjectEditDialog(
@@ -23,7 +23,7 @@ fun ProjectEditDialog(
     var errorMessage by remember { mutableStateOf("") }
 
     Dialog(onDismissRequest = onDismiss) {
-        Card(
+        MiuixCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
