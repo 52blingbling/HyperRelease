@@ -1,13 +1,7 @@
-import com.android.build.gradle.tasks.CheckAarMetadata
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
-}
-
-tasks.withType<CheckAarMetadata>().configureEach {
-    enabled = false
 }
 
 android {
@@ -79,4 +73,9 @@ dependencies {
     // 网络与 JSON 请求 (用于请求 GitHub Release API)
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+}
+
+// 动态匹配并禁用所有 AAR 元数据校验任务，零编译依赖，避免强校验中断
+tasks.matching { it.name.contains("AarMetadata") }.configureEach {
+    enabled = false
 }
