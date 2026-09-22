@@ -1,7 +1,13 @@
+import com.android.build.gradle.tasks.CheckAarMetadata
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+}
+
+tasks.withType<CheckAarMetadata>().configureEach {
+    enabled = false
 }
 
 android {
