@@ -13,8 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.github.releasemonitor.model.Project
-import top.yukonga.miuix.kmp.basic.Button
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
 
 @Composable
@@ -55,7 +53,7 @@ fun ReleaseDetailDialog(
                 ) {
                     Text("当前版本: ${project.currentVer.ifEmpty { "未设" }}")
                     Text(
-                        "最新版本: ${project.latestVer.ifEmpty { "未获取" }}",
+                        text = "最新版本: ${project.latestVer.ifEmpty { "未获取" }}",
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -63,7 +61,7 @@ fun ReleaseDetailDialog(
 
                 Text("发布时间: ${project.publishedAt.ifEmpty { "未知" }}  |  上次检测: ${project.lastChecked.ifEmpty { "未检测" }}")
 
-                Divider(modifier = Modifier.padding(vertical = 4.dp))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
                 Text("更新日志 (Changelog):", fontWeight = FontWeight.SemiBold)
 
@@ -91,7 +89,7 @@ fun ReleaseDetailDialog(
                                 context.startActivity(intent)
                             }
                         ) {
-                            Text("浏览器下载")
+                            Text("下载")
                         }
                     }
 
@@ -101,17 +99,17 @@ fun ReleaseDetailDialog(
                                 onMarkAsLatest(project.copy(currentVer = project.latestVer, status = "已是最新"))
                                 onDismiss()
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
                         ) {
-                            Text("设为当前", color = MaterialTheme.colorScheme.onSecondaryContainer)
+                            Text("设为当前")
                         }
                     }
 
-                    Button(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-                    ) {
-                        Text("关闭", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    TextButton(onClick = onDismiss) {
+                        Text("关闭")
                     }
                 }
             }

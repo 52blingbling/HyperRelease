@@ -23,12 +23,10 @@ import com.github.releasemonitor.ui.dialogs.ProjectEditDialog
 import com.github.releasemonitor.ui.dialogs.ReleaseDetailDialog
 import com.github.releasemonitor.ui.dialogs.SettingsDialog
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.basic.Button
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.Scaffold
+import top.yukonga.miuix.kmp.basic.Switch
 import top.yukonga.miuix.kmp.basic.TopAppBar
-import top.yukonga.miuix.kmp.preference.SuperSwitch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,13 +122,30 @@ fun MainScreen(storage: StorageManager) {
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            // 1. 设置分组卡片 (包含 SuperSwitch)
+            // 1. 设置分组卡片 (MIUI 胶囊 Switch)
             item {
                 Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
-                    Column(modifier = Modifier.padding(vertical = 4.dp)) {
-                        SuperSwitch(
-                            title = "打开软件自动检测",
-                            summary = "启动应用时自动检查已录入项目的最新版本",
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 14.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
+                            Text(
+                                text = "打开软件自动检测",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "启动应用时自动检查已录入项目的最新版本",
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Switch(
                             checked = autoCheckOnLaunch,
                             onCheckedChange = {
                                 autoCheckOnLaunch = it
@@ -177,7 +192,11 @@ fun MainScreen(storage: StorageManager) {
                             Spacer(modifier = Modifier.height(10.dp))
                             Text("暂未录入监控项目", fontWeight = FontWeight.SemiBold)
                             Spacer(modifier = Modifier.height(6.dp))
-                            Text("点击右上角 ＋ 按钮录入您的首个 GitHub 仓库", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(
+                                text = "点击右上角 ＋ 按钮录入您的首个 GitHub 仓库",
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
                     }
                 }
@@ -247,7 +266,7 @@ fun MainScreen(storage: StorageManager) {
                                 Text("本地: ${p.currentVer.ifEmpty { "-" }}", fontSize = 12.sp)
                                 Text("➔", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 Text(
-                                    "最新: ${p.latestVer.ifEmpty { "-" }}",
+                                    text = "最新: ${p.latestVer.ifEmpty { "-" }}",
                                     fontSize = 12.sp,
                                     fontWeight = if (hasUpdate) FontWeight.Bold else FontWeight.Normal,
                                     color = if (hasUpdate) Color(0xFFFF6900) else MaterialTheme.colorScheme.onSurface
@@ -279,15 +298,21 @@ fun MainScreen(storage: StorageManager) {
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Button(
                                     onClick = { checkSingleProject(p) },
-                                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
                                 ) {
-                                    Text("刷新", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    Text("刷新", fontSize = 12.sp)
                                 }
                                 Button(
                                     onClick = { editingProject = p },
-                                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
                                 ) {
-                                    Text("编辑", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    Text("编辑", fontSize = 12.sp)
                                 }
                             }
                         }
@@ -313,7 +338,6 @@ fun MainScreen(storage: StorageManager) {
                 )
                 storage.addOrUpdateProject(newProject)
                 projects = storage.getProjects()
-                // 立即检测新项目
                 checkSingleProject(newProject)
             }
         )

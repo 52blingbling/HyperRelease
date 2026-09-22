@@ -8,10 +8,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import top.yukonga.miuix.kmp.basic.Button
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
-import top.yukonga.miuix.kmp.basic.TextField
 
 @Composable
 fun SettingsDialog(
@@ -39,11 +36,12 @@ fun SettingsDialog(
                     fontWeight = FontWeight.Bold
                 )
 
-                TextField(
+                OutlinedTextField(
                     value = token,
                     onValueChange = { token = it },
-                    label = "GitHub Personal Access Token (选填)",
-                    modifier = Modifier.fillMaxWidth()
+                    label = { Text("GitHub Token (选填)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
                 )
 
                 Surface(
@@ -58,9 +56,9 @@ fun SettingsDialog(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "• 不配置 Token 时，GitHub 仅允许每小时请求 60 次，手机在同一基站/WiFi 下容易因频控超限检测失败；\n" +
+                            text = "• 不配置 Token 时，GitHub 每小时仅限 60 次，手机在同一基站/WiFi 极易因频控超限；\n" +
                                    "• 配置 Token 后，API 额度立即提升至 5000 次/小时，几百个项目也能平稳检测；\n" +
-                                   "• 申请 Token 时无需勾选任何敏感权限（仅用于读取公开 Release），安全无忧。",
+                                   "• 申请 Token 时无需勾选任何敏感权限（仅读公开 Release），安全无忧。",
                             fontSize = 11.sp,
                             lineHeight = 16.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -72,11 +70,8 @@ fun SettingsDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Button(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-                    ) {
-                        Text("取消", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    TextButton(onClick = onDismiss) {
+                        Text("取消")
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))

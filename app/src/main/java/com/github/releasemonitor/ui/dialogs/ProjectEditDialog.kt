@@ -7,10 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.github.releasemonitor.model.Project
-import top.yukonga.miuix.kmp.basic.Button
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
-import top.yukonga.miuix.kmp.basic.TextField
 
 @Composable
 fun ProjectEditDialog(
@@ -42,31 +39,34 @@ fun ProjectEditDialog(
                     style = MaterialTheme.typography.titleLarge
                 )
 
-                TextField(
+                OutlinedTextField(
                     value = title,
                     onValueChange = { title = it; errorMessage = "" },
-                    label = "项目标题 (*必填)",
-                    modifier = Modifier.fillMaxWidth()
+                    label = { Text("项目标题 (*必填)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
                 )
 
-                TextField(
+                OutlinedTextField(
                     value = repo,
                     onValueChange = { repo = it; errorMessage = "" },
-                    label = "GitHub 仓库 (*owner/repo)",
-                    modifier = Modifier.fillMaxWidth()
+                    label = { Text("GitHub 仓库 (*owner/repo)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
                 )
 
-                TextField(
+                OutlinedTextField(
                     value = currentVer,
                     onValueChange = { currentVer = it },
-                    label = "当前版本 (选填)",
-                    modifier = Modifier.fillMaxWidth()
+                    label = { Text("当前版本 (选填)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
                 )
 
-                TextField(
+                OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = "备注说明 (选填)",
+                    label = { Text("备注说明 (选填)") },
                     modifier = Modifier.fillMaxWidth(),
                     maxLines = 3
                 )
@@ -86,18 +86,18 @@ fun ProjectEditDialog(
                     if (project != null && onDelete != null) {
                         Button(
                             onClick = { onDelete(project.id); onDismiss() },
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer
+                            )
                         ) {
-                            Text("删除", color = MaterialTheme.colorScheme.onErrorContainer)
+                            Text("删除")
                         }
                         Spacer(modifier = Modifier.weight(1f))
                     }
 
-                    Button(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-                    ) {
-                        Text("取消", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    TextButton(onClick = onDismiss) {
+                        Text("取消")
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
