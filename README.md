@@ -1,4 +1,4 @@
-# Release 监控助手 (MIUIX 风格 Android 原生客户端)
+# Github Release更新 (MIUIX 风格 Android 原生客户端)
 
 专为 Android 移动端打造的独立 GitHub Release 版本监控应用。UI 基于小米澎湃OS / MIUI 设计语言，完全采用 [compose-miuix-ui/miuix](https://github.com/compose-miuix-ui/miuix) 官方核心组件库构建。
 

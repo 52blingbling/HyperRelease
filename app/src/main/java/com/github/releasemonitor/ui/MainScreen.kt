@@ -95,7 +95,7 @@ fun MainScreen(storage: StorageManager) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Release 监控",
+                        text = "Github Release更新",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
